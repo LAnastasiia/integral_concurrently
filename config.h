@@ -132,10 +132,12 @@ public:
                     std::string cnf_name = content.front();
                     content.pop_front();
 
+                    std::cout << cnf[cnf_name](content);
+
                     if ( cnf.find(cnf_name) != cnf.end()){
                         if ( cnf[cnf_name](content) ){
                             check_set.erase (cnf_name);
-                        } else { std::cout << "Error. Couldn't load" + cnf_name + "\n" << std::endl; return -3; }
+                        } else { std::cout << "Error. Couldn't load " + cnf_name + "\n" << std::endl; return -3; }
                     }
                 }
                 f.close();
