@@ -2,7 +2,6 @@
 #ifndef INTEGRAL_CONCURRENTLY_TIME_MEASURE_H
 #define INTEGRAL_CONCURRENTLY_TIME_MEASURE_H
 
-#include <iostream>
 #include <chrono>
 #include <atomic>
 
