@@ -32,12 +32,12 @@ int main(int argc, char *argv[])
                     std::cout << "Configurations loaded successfully.\n" << std::endl;
 
                     // tune
-                    int num_steps = tune_num_steps(mc); // дуже довго тюнить; вдала к-сть при abs=0.05 : min 102400
+                    int num_steps = 25600;            // вдала к-сть при abs=0.05 rel=0.01
+                    num_steps = tune_num_steps(mc);   // трохи довго тюнить;
 
                     // time
                     auto st_time_p = get_current_time_fenced();
                         double res_p = integrate_p(mc, num_steps);
-
                     auto res_time_p = get_current_time_fenced() - st_time_p;
 
                     // output
@@ -70,6 +70,3 @@ int main(int argc, char *argv[])
 
 // acc: 0.05, 0.01
 // result: -5.085075, time: 5029265082, absolute err: 0.052528, relative err: 0.010303
-
-// double res_p = integrate_c(std::get<0>(mc.interval_x1), std::get<0>(mc.interval_x2),
-//                            std::get<1>(mc.interval_x2), std::get<1>(mc.interval_x1), num_steps, mc.parameter_m);

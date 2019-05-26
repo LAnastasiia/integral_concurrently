@@ -20,6 +20,17 @@ bool MyConfig::set_max_num_steps(const std::list<std::string> &s_values){
 }
 
 
+bool MyConfig::set_init_num_steps(const std::list<std::string> &s_values){
+    std::istringstream ss (s_values.front());
+    int ch = stoi(s_values.front());
+    if ( ch > 0 ){
+        return ss >> init_num_steps ? true: false;
+    }
+    return false;
+}
+
+
+
 bool MyConfig::set_rel_accuracy(const std::list<std::string> &s_values){
     std::istringstream ss (s_values.front());
     double a_ch = std::stod(s_values.front());
@@ -52,7 +63,7 @@ bool MyConfig::set_interval_x1(const std::list<std::string> &s_values) {
         auto i_beg = std::stod(s_values.front());
         auto i_end = std::stod(*std::next(s_values.begin(), 1));
         if (i_beg < i_end){
-            interval_x1 = std::make_tuple(i_beg, i_end);
+            interval_x1 = {i_beg, i_end};
             return true;
         }
     }
@@ -65,7 +76,7 @@ bool MyConfig::set_interval_x2(const std::list<std::string> &s_values) {
         auto i_beg = std::stod(s_values.front());
         auto i_end = std::stod(*std::next(s_values.begin(), 1));
         if (i_beg < i_end){
-            interval_x2 = std::make_tuple(i_beg, i_end);
+            interval_x2 = {i_beg, i_end};
             return true;
         }
     }
@@ -88,6 +99,7 @@ int MyConfig::load_configs_from_file(const std::string &f_name){
     cnf.emplace(std::make_pair("interval_of_integration_by_x1", [this](const std::list<std::string> &s_values)-> bool {return set_interval_x1(s_values);}));
     cnf.emplace(std::make_pair("interval_of_integration_by_x2", [this](const std::list<std::string> &s_values)-> bool {return set_interval_x2(s_values);}));
     cnf.emplace(std::make_pair("max_num_steps", [this](const std::list<std::string> &s_values)-> bool {return set_max_num_steps(s_values);}));
+    cnf.emplace(std::make_pair("init_num_steps", [this](const std::list<std::string> &s_values)-> bool {return set_init_num_steps(s_values);}));
 
     try{
         // read config-file line by line

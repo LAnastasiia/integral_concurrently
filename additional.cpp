@@ -36,17 +36,25 @@ double shubert_func(double x1, double x2, int m){
 int tune_num_steps(MyConfig mc){
     int num_steps = 200;
     int max_ns = mc.max_num_steps;
-    double prev_res = integrate_c(std::get<0>(mc.interval_x1), std::get<0>(mc.interval_x2),
-                                  std::get<1>(mc.interval_x1), std::get<1>(mc.interval_x2),
-                                  num_steps, mc.parameter_m);
+    double dx_1 = fabs(mc.interval_x1[1] - mc.interval_x1[0]) / num_steps;
+    double dx_2 = fabs(mc.interval_x2[1] - mc.interval_x2[0]) / num_steps;
+
+    double prev_res = integrate_c(mc.interval_x1[0], mc.interval_x2[0],
+                                  mc.interval_x1[1], mc.interval_x2[1],
+                                  dx_1, dx_2,
+                                  mc.parameter_m);
     num_steps *= 2;
 
     while (num_steps < max_ns){
         std::cout << "trying num_steps = " + std::to_string(num_steps) << std::endl;
 
-        double curr_res = integrate_c(std::get<0>(mc.interval_x1), std::get<0>(mc.interval_x2),
-                                      std::get<1>(mc.interval_x1), std::get<1>(mc.interval_x2),
-                                      num_steps, mc.parameter_m);
+        dx_1 = fabs(mc.interval_x1[1] - mc.interval_x1[0]) / num_steps;
+        dx_2 = fabs(mc.interval_x2[1] - mc.interval_x2[0]) / num_steps;
+
+        double curr_res = integrate_c(mc.interval_x1[0], mc.interval_x2[0],
+                                      mc.interval_x1[1], mc.interval_x2[1],
+                                      dx_1, dx_2,
+                                      mc.parameter_m);
 
         double abs_err = fabs(curr_res - prev_res);
         double rel_err = fabs((curr_res - prev_res) / curr_res);
