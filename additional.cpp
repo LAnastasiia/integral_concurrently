@@ -34,7 +34,7 @@ double shubert_func(double x1, double x2, int m){
 
 // ~~~~~~~~~~~~~~ Finding optimal number of steps for integration with given abs-, rel- errors. ~~~~~~~~~~~~~~
 int tune_num_steps(MyConfig mc){
-    int num_steps = 200;
+    int num_steps = mc.init_num_steps;
     int max_ns = mc.max_num_steps;
     double dx_1 = fabs(mc.interval_x1[1] - mc.interval_x1[0]) / num_steps;
     double dx_2 = fabs(mc.interval_x2[1] - mc.interval_x2[0]) / num_steps;

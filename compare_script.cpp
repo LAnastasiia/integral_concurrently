@@ -30,31 +30,42 @@ int main(int argc, char *argv[]){
 
 
             int num_steps = 25600;
-            num_steps = tune_num_steps(mc);
+//            num_steps = tune_num_steps(mc);
 
             auto example = get_current_time_fenced();
-            std::vector<decltype(get_current_time_fenced()-example)> time_results;
-            std::vector<double> comp_results;
-
+            std::vector<decltype(get_current_time_fenced()-example)> all_time_results;
+            std::vector<double> all_comp_results;
 
             std::ofstream f (out_filename);
-            for (int i=0; i < n; i++) {
-                auto st_time = get_current_time_fenced();              // measure the time of integrating_p
-                double res = integrate_p(mc, num_steps);
-                auto f_time = get_current_time_fenced() - st_time;
+            for (int t=16; t < 30; t++) {
+                mc.set_num_threads(t);
 
-                // save results
-                std::cout << "~~~~~~~~~~~~~" << std::endl;
-                time_results.emplace_back(f_time);
-                comp_results.emplace_back(res);
-                f << std::to_string(res) + "   " + std::to_string(to_us(f_time)) << std::endl;
+                std::vector<decltype(get_current_time_fenced()-example)> time_results;
+                std::vector<double> comp_results;
+
+                for (int i = 0; i < n; i++) {
+                    auto st_time = get_current_time_fenced();              // measure the time of integrating_p
+                    double res = integrate_p(mc, num_steps);
+                    auto f_time = get_current_time_fenced() - st_time;
+
+                    // save results
+                    std::cout << "~~~~~~~~~~~~~" << std::endl;
+                    time_results.emplace_back(f_time);
+                    comp_results.emplace_back(res);
+                    f << std::to_string(res) + "   " + std::to_string(to_us(f_time)) << std::endl;
+                }
+                all_comp_results.push_back(*comp_results.end());
+
+                // output the min time
+                std::cout << "min time: " << to_us(*std::min_element(time_results.begin(), time_results.end())) << std::endl;
             }
+
 
             // check results.
             double c = 0;
-            for(size_t i = 1; i < comp_results.size(); i++){
-                if ( fabs(comp_results[i] - comp_results[i-1]) > pow(10, -7) ){
-                    c += std::max(c, fabs(comp_results[i] - comp_results[i-1]));
+            for (size_t i = 1; i < all_comp_results.size(); i++) {
+                if (fabs(all_comp_results[i] - all_comp_results[i - 1]) > pow(10, -7)) {
+                    c += std::max(c, fabs(all_comp_results[i] - all_comp_results[i - 1]));
                 }
             }
 
@@ -65,9 +76,6 @@ int main(int argc, char *argv[]){
             } else {
                 std::cout << "NOT ALL results can be equal." << std::endl << "Max deviation = " << c << std::endl;
             }
-
-            // output the min time
-            std::cout << "min time: " << to_us(*std::min_element(time_results.begin(), time_results.end())) << std::endl;
 
 
         } else { std::cout << "Invalid 'in-' and 'out-' filenames specification." << std::endl; exit(0); }

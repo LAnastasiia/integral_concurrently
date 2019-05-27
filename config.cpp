@@ -1,7 +1,7 @@
 #include "config.h"
 
 
-bool MyConfig::set_abs_accuracy(const std::list<std::string> &s_values){
+bool MyConfig::load_abs_accuracy(const std::list<std::string> &s_values){
     std::istringstream ss (s_values.front());
         double a_ch = std::stod(s_values.front());
         if (a_ch <= 0){
@@ -10,7 +10,7 @@ bool MyConfig::set_abs_accuracy(const std::list<std::string> &s_values){
     }
 
 
-bool MyConfig::set_max_num_steps(const std::list<std::string> &s_values){
+bool MyConfig::load_max_num_steps(const std::list<std::string> &s_values){
     std::istringstream ss (s_values.front());
     int ch = stoi(s_values.front());
     if ( ch > 0 ){
@@ -20,7 +20,7 @@ bool MyConfig::set_max_num_steps(const std::list<std::string> &s_values){
 }
 
 
-bool MyConfig::set_init_num_steps(const std::list<std::string> &s_values){
+bool MyConfig::load_init_num_steps(const std::list<std::string> &s_values){
     std::istringstream ss (s_values.front());
     int ch = stoi(s_values.front());
     if ( ch > 0 ){
@@ -31,7 +31,7 @@ bool MyConfig::set_init_num_steps(const std::list<std::string> &s_values){
 
 
 
-bool MyConfig::set_rel_accuracy(const std::list<std::string> &s_values){
+bool MyConfig::load_rel_accuracy(const std::list<std::string> &s_values){
     std::istringstream ss (s_values.front());
     double a_ch = std::stod(s_values.front());
     if (a_ch <= 0){
@@ -40,7 +40,7 @@ bool MyConfig::set_rel_accuracy(const std::list<std::string> &s_values){
 }
 
 
-bool MyConfig::set_num_threads(const std::list<std::string> &s_values){
+bool MyConfig::load_num_threads(const std::list<std::string> &s_values){
     std::istringstream ss (s_values.front());
     int ns_ch = std::stoi(s_values.front());
     if (ns_ch <= 0){
@@ -49,7 +49,7 @@ bool MyConfig::set_num_threads(const std::list<std::string> &s_values){
 }
 
 
-bool MyConfig::set_m(const std::list<std::string> &s_values) {
+bool MyConfig::load_m(const std::list<std::string> &s_values) {
     std::istringstream ss (s_values.front());
     int m_check = stoi(s_values.front());
     if ( m_check > 0 ){
@@ -58,7 +58,7 @@ bool MyConfig::set_m(const std::list<std::string> &s_values) {
 }
 
 
-bool MyConfig::set_interval_x1(const std::list<std::string> &s_values) {
+bool MyConfig::load_interval_x1(const std::list<std::string> &s_values) {
     if (s_values.size() == 2){
         auto i_beg = std::stod(s_values.front());
         auto i_end = std::stod(*std::next(s_values.begin(), 1));
@@ -71,7 +71,7 @@ bool MyConfig::set_interval_x1(const std::list<std::string> &s_values) {
 }
 
 
-bool MyConfig::set_interval_x2(const std::list<std::string> &s_values) {
+bool MyConfig::load_interval_x2(const std::list<std::string> &s_values) {
     if (s_values.size() == 2){
         auto i_beg = std::stod(s_values.front());
         auto i_end = std::stod(*std::next(s_values.begin(), 1));
@@ -92,14 +92,14 @@ bool MyConfig::is_configured(){
 int MyConfig::load_configs_from_file(const std::string &f_name){
     // map with key: name, val: setter method call
     std::map< std::string, std::function<bool(const std::list<std::string>&)> > cnf;
-    cnf.emplace(std::make_pair("relative_accuracy", [this](const std::list<std::string> &s_values)-> bool {return set_rel_accuracy(s_values);}));
-    cnf.emplace(std::make_pair("absolute_accuracy", [this](const std::list<std::string> &s_values)-> bool {return set_abs_accuracy(s_values);}));
-    cnf.emplace(std::make_pair("num_of_threads", [this](const std::list<std::string> &s_values)-> bool {return set_num_threads(s_values);}));
-    cnf.emplace(std::make_pair("parameter_m", [this](const std::list<std::string> &s_values)-> bool {return set_m(s_values);}));
-    cnf.emplace(std::make_pair("interval_of_integration_by_x1", [this](const std::list<std::string> &s_values)-> bool {return set_interval_x1(s_values);}));
-    cnf.emplace(std::make_pair("interval_of_integration_by_x2", [this](const std::list<std::string> &s_values)-> bool {return set_interval_x2(s_values);}));
-    cnf.emplace(std::make_pair("max_num_steps", [this](const std::list<std::string> &s_values)-> bool {return set_max_num_steps(s_values);}));
-    cnf.emplace(std::make_pair("init_num_steps", [this](const std::list<std::string> &s_values)-> bool {return set_init_num_steps(s_values);}));
+    cnf.emplace(std::make_pair("relative_accuracy", [this](const std::list<std::string> &s_values)-> bool {return load_rel_accuracy(s_values);}));
+    cnf.emplace(std::make_pair("absolute_accuracy", [this](const std::list<std::string> &s_values)-> bool {return load_abs_accuracy(s_values);}));
+    cnf.emplace(std::make_pair("num_of_threads", [this](const std::list<std::string> &s_values)-> bool {return load_num_threads(s_values);}));
+    cnf.emplace(std::make_pair("parameter_m", [this](const std::list<std::string> &s_values)-> bool {return load_m(s_values);}));
+    cnf.emplace(std::make_pair("interval_of_integration_by_x1", [this](const std::list<std::string> &s_values)-> bool {return load_interval_x1(s_values);}));
+    cnf.emplace(std::make_pair("interval_of_integration_by_x2", [this](const std::list<std::string> &s_values)-> bool {return load_interval_x2(s_values);}));
+    cnf.emplace(std::make_pair("max_num_steps", [this](const std::list<std::string> &s_values)-> bool {return load_max_num_steps(s_values);}));
+    cnf.emplace(std::make_pair("init_num_steps", [this](const std::list<std::string> &s_values)-> bool {return load_init_num_steps(s_values);}));
 
     try{
         // read config-file line by line
@@ -136,4 +136,12 @@ int MyConfig::load_configs_from_file(const std::string &f_name){
 
         } else { std::cout << "File coulnd't be opened."; return -1; }
     } catch(std::string &err){ std::cout << err << std::endl; return -2; }
+}
+
+
+bool MyConfig::set_num_threads(int num){
+    if (num > 0){
+        number_of_threads = num;
+        return true;
+    } return false;
 }

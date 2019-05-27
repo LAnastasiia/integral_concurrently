@@ -1,0 +1,36 @@
+configured {abs_err: 0.5, rel_err: 0.01}
+
+trying num_steps = 400
+res:          -0.216539
+absolute err: 597.732566
+relative err: 2760.386145
+
+trying num_steps = 800
+res:          -19.692334
+absolute err: 19.475794
+relative err: 0.989004
+
+trying num_steps = 1600
+res:          -10.689450
+absolute err: 9.002884
+relative err: 0.842221
+
+trying num_steps = 3200
+res:          -5.598646
+absolute err: 5.090804
+relative err: 0.909292
+
+trying num_steps = 6400
+res:          -3.413273
+absolute err: 2.185372
+relative err: 0.640257
+
+trying num_steps = 12800
+res:          -2.471556
+absolute err: 0.941717
+relative err: 0.381022
+
+trying num_steps = 25600
+res:          -2.046187
+absolute err: 0.425370
+relative err: 0.207884
